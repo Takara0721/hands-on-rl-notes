@@ -1,24 +1,17 @@
 from .markov import Markov
 from Chapter3.state.base_states import BaseStates
 from Chapter3.transition.state_transition import StateTransition
+import numpy as np
 
 class MarkovRewardProcess(Markov):
     def __init_transition_matrix(
             self,
-            states: type[BaseStates],
             markov_chain: list[StateTransition]
     ) -> list[list[float]]:
-        n = len(states)
-        P = [[0.0 for _ in range(n)] for _ in range(n)]
+        P = [[0.0 for _ in range(self.state_num)] for _ in range(self.state_num)]
         for state_transition in markov_chain:
             P[state_transition.start.index][state_transition.end.index] = state_transition.probability
         return P
-
-    def __init_reward_list(self, states: type[BaseStates]) -> list[float]:
-        reward_list = []
-        for state in states:
-            reward_list.append(state.reward)
-        return reward_list
 
     def __init__(
             self,
@@ -27,8 +20,9 @@ class MarkovRewardProcess(Markov):
             gamma: float
     ) -> None:
         super().__init__(states, gamma)
-        self.transition_matrix = self.__init_transition_matrix(states, markov_chain)
-        self.reward_list = self.__init_reward_list(states)
+        self.state_num = len(self.states)
+        self.reward_list = [state.reward for state in self.states]
+        self.transition_matrix = self.__init_transition_matrix(markov_chain)
 
     def compute_return(self, chain: list[BaseStates]) -> float:
         G = 0
@@ -37,4 +31,11 @@ class MarkovRewardProcess(Markov):
         return G
 
     def compute_value_function(self) -> list[float]:
-        pass
+        rewards = np.array(self.reward_list).reshape((-1, 1))
+        value_function = np.dot(
+            np.linalg.inv(
+                np.identity(self.state_num) - self.gamma * np.array(self.transition_matrix)
+            ),
+            rewards
+        )
+        return value_function

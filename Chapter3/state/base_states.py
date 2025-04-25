@@ -6,5 +6,5 @@ class BaseStates(enum.Enum):
         return self.value.index
 
     @property
-    def reward(self) -> float:
+    def reward(self) -> float | None:
         return self.value.reward
