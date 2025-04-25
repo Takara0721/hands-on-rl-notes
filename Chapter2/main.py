@@ -1,10 +1,10 @@
 from typing import Callable
-from bernoulli_bandit import BernoulliBandit
-from epsilon_greedy import EpsilonGreedy
-from decaying_epsilon_greedy import DecayingEpsilonGreedy
-from ucb import UCB
-from thompson_sampling import ThompsonSampling
-from solver import Solver
+from bandit.bernoulli_bandit import BernoulliBandit
+from solver.epsilon_greedy import EpsilonGreedy
+from solver.decaying_epsilon_greedy import DecayingEpsilonGreedy
+from solver.ucb import UCB
+from solver.thompson_sampling import ThompsonSampling
+from solver.solver import Solver
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     ucb_run()
 
     np.random.seed(1)
-    thompson_sampling_run(50000)
+    thompson_sampling_run()
 
 
 

@@ -1,5 +1,5 @@
 import numpy as np
-from bandit import Bandit
+from .bandit import Bandit
 
 class BernoulliBandit(Bandit):
     def __init__(self, n: int) -> None:

@@ -1,6 +1,6 @@
 import numpy as np
-from bandit import Bandit
-from solver import Solver
+from Chapter2.bandit.bandit import Bandit
+from .solver import Solver
 
 
 class UCB(Solver):

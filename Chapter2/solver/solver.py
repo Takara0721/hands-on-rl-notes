@@ -1,6 +1,6 @@
 import numpy as np
 
-from bandit import Bandit
+from Chapter2.bandit.bandit import Bandit
 import abc
 
 class Solver(abc.ABC):
