@@ -1,6 +1,6 @@
 import enum
 
-class BaseStates(enum.Enum):
+class BaseStateEnum(enum.Enum):
     @property
     def index(self) -> int:
         return self.value.index

@@ -1,7 +1,7 @@
-from .base_states import BaseStates
+from .base_state_enum import BaseStateEnum
 from .state import State
 
-class StudentStates(BaseStates):
+class StudentStateEnum(BaseStateEnum):
     Facebook = State(0, -1)
     Class1 = State(1, -2)
     Class2 = State(2, -2)

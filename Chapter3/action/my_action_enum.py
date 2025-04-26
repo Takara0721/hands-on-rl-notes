@@ -1,6 +1,6 @@
-from .base_actions import BaseActions
+from .base_action import BaseActionEnum
 
-class MyActions(BaseActions):
+class MyActionEnum(BaseActionEnum):
     KeepS1 = 0
     GoS1 = 1
     GoS2 = 2

@@ -7,4 +7,12 @@
     <orderEntry type="jdk" jdkName="Python 3.12 (ReinforcementLearning)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PyNamespacePackagesService">
+    <option name="namespacePackageFolders">
+      <list>
+        <option value="$MODULE_DIR$/Chapter2" />
+        <option value="$MODULE_DIR$/Chapter3" />
+      </list>
+    </option>
+  </component>
 </module>
