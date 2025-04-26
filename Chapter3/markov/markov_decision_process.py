@@ -1,4 +1,6 @@
 import numpy as np
+from numpy import ndarray, dtype, float64
+
 from .markov import Markov
 from Chapter3.state.base_state_enum import BaseStateEnum
 from Chapter3.action.base_action import BaseActionEnum, ActionDetail
@@ -72,7 +74,7 @@ class MarkovDecisionProcess(Markov):
             G = self.state_action_details[sa_pair].reward + G * self.gamma
         return G
 
-    def compute_state_value_function_list(self) -> list[float]:
+    def compute_state_value_function_list(self) -> ndarray[tuple[int, int], dtype[float64]]:
         if self.mrp_reward_list is None and self.mrp_transition_matrix is None:
             self.mrp_transition_matrix = self.__init_mrp_transition_matrix()
             self.mrp_reward_list = self.__init_mrp_reward_list()
@@ -100,3 +102,58 @@ class MarkovDecisionProcess(Markov):
             )
 
         return action_value_function
+
+    def sample(self, timestep_max: int) -> list[SAPair]:
+        state_list = list(self.states)
+        state = state_list[np.random.randint(self.state_num - 1)]
+        end = state_list[-1]
+
+        episode = []
+        timestep = 0
+        while state != end and timestep < timestep_max:
+            action, rand, tmp = None, np.random.random(), 0
+            for _action in self.sa_pairs[state]:
+                tmp += self.state_action_details[SAPair(state, _action)].probability
+                if rand < tmp:
+                    action = _action
+                    break
+
+            episode.append(SAPair(state, action))
+            rand, tmp = np.random.random(), 0
+            for _next_state in self.sas_pairs[state][action]:
+                tmp += self.markov_chain[StateTransition(state, _next_state, action)]
+                if rand < tmp:
+                    state = _next_state
+                    break
+
+            timestep += 1
+
+        return episode
+
+    def monte_carlo_policy_evaluation_v(
+            self,
+            timestep_max: int,
+            sample_num: int
+    ) -> ndarray[tuple[int, int], dtype[float64]]:
+        state_value_function_list = np.zeros(self.state_num)
+        count_list = np.zeros(self.state_num)
+
+        for _ in range(sample_num):
+            episode = self.sample(timestep_max)
+            start = episode[0].state
+            count_list[start.index] += 1
+            state_value_function_list[start.index] += (
+                    self.compute_return(episode)
+                    - state_value_function_list[start.index]
+            ) / count_list[start.index]
+
+        return state_value_function_list.reshape(-1, 1)
+
+    def occupancy_evaluation(
+            self,
+            state: BaseStateEnum,
+            action: BaseActionEnum,
+            timestep_max: int,
+            sample_num: int
+    ) -> float:
+        pass
