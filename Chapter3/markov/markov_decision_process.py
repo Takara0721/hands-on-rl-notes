@@ -48,6 +48,13 @@ class MarkovDecisionProcess(Markov):
             sas_pairs[key.start][key.action].append(key.end)
         return sas_pairs
 
+    def __is_legal_policy(self, policy: dict[SAPair, float]) -> bool:
+        state_probability = np.zeros(self.state_num - 1)
+        for sa_pair in self.state_action_details:
+            state_probability[sa_pair.state.index] += policy[sa_pair]
+        is_close_one = np.isclose(state_probability, 1.0, atol=1e-8)
+        return np.all(is_close_one)
+
     def __init__(
             self,
             states: type[BaseStateEnum],
@@ -64,6 +71,16 @@ class MarkovDecisionProcess(Markov):
         self.action_num = len(self.actions)
         self.sa_pairs = self.__init_legal_sa_pairs()
         self.sas_pairs = self.__init_legal_sas_pairs()
+        self.mrp_transition_matrix = None
+        self.mrp_reward_list = None
+        self.state_value_function_list = None
+
+    def change_policy(self, policy: dict[SAPair, float]) -> None:
+        if len(policy) != len(self.state_action_details) or not self.__is_legal_policy(policy):
+            raise Exception("非合法策略！")
+        for sa_pair in policy:
+            self.state_action_details[sa_pair].probability = policy[sa_pair]
+
         self.mrp_transition_matrix = None
         self.mrp_reward_list = None
         self.state_value_function_list = None
@@ -156,4 +173,20 @@ class MarkovDecisionProcess(Markov):
             timestep_max: int,
             sample_num: int
     ) -> float:
-        pass
+        rho = 0
+        total_times = np.zeros(timestep_max)
+        occur_times = np.zeros(timestep_max)
+
+        for _ in range(sample_num):
+            episode = self.sample(timestep_max)
+            for i, sa_pair in enumerate(episode):
+                total_times[i] += 1
+                if state == sa_pair.state and action == sa_pair.action:
+                    occur_times[i] += 1
+
+        # 这里借鉴书中的代码 对于这个序列反不反转不影响结果 可能反转后先计算小的数值再加起来时 精度会稍微高一点
+        for i in reversed(range(timestep_max)):
+            if total_times[i]:
+                rho += self.gamma ** i * occur_times[i] / total_times[i]
+
+        return (1 - self.gamma) * rho

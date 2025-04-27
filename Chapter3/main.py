@@ -51,6 +51,26 @@ def markov_decision_process(
 
     print(f"使用蒙特卡洛方法计算MDP的状态价值为\n{evaluation_svf_list}")
 
+    rho1 = mdp.occupancy_evaluation(MyMDPStateEnum.S4, MyActionEnum.RandomGo, 20, 1000)
+
+    print(f"随机策略下，(S4, 概率前往)的占用度量估计为：{rho1}")
+
+    policy = {
+        SAPair(MyMDPStateEnum.S1, MyActionEnum.KeepS1): 0.6,
+        SAPair(MyMDPStateEnum.S1, MyActionEnum.GoS2): 0.4,
+        SAPair(MyMDPStateEnum.S2, MyActionEnum.GoS1): 0.3,
+        SAPair(MyMDPStateEnum.S2, MyActionEnum.GoS3): 0.7,
+        SAPair(MyMDPStateEnum.S3, MyActionEnum.GoS4): 0.5,
+        SAPair(MyMDPStateEnum.S3, MyActionEnum.GoS5): 0.5,
+        SAPair(MyMDPStateEnum.S4, MyActionEnum.GoS5): 0.1,
+        SAPair(MyMDPStateEnum.S4, MyActionEnum.RandomGo): 0.9
+    }
+    mdp.change_policy(policy)
+
+    rho2 = mdp.occupancy_evaluation(MyMDPStateEnum.S4, MyActionEnum.RandomGo, 20, 1000)
+
+    print(f"书中给出的策略下，(S4, 概率前往)的占用度量估计为：{rho2}")
+
 
 if __name__ == '__main__':
     mrp_markov_chain = {
