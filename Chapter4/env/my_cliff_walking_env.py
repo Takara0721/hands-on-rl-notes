@@ -39,6 +39,5 @@ class MyCliffWalkingEnv:
         return P
 
     def __init__(self) -> None:
-        self.col_num = 12
-        self.row_num = 4
+        self.shape = (4, 12)
         self.P = self.__init_P()

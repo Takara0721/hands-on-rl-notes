@@ -14,13 +14,13 @@ env = gym.make(
 
 observation, info = env.reset()
 time.sleep(1)
-
+print(env.unwrapped.shape)
 terminated = False
 truncated = False
 while not terminated and not truncated:
     action = int(input())  # agent policy that uses the observation and info
     observation, reward, terminated, truncated, info = env.step(action)
-    print(env.unwrapped.P[14][1])
+    print(env.unwrapped.P)
     print(observation)
     env.render()
     time.sleep(2)

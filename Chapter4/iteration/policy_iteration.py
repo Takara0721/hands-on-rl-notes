@@ -70,3 +70,24 @@ class PolicyIteration(BaseIteration):
             if old_policy == self.policy:
                 break
 
+    def output_v_policy(self) -> None:
+        map_shape = self.env.shape
+        with np.printoptions(precision=3, linewidth=150, formatter={'float': '{: 8.3f}'.format}):
+            print(self.value_function_list.reshape(map_shape))
+
+        action_str_list = ['↑', '→', '↓', '←']
+        policy_str_list = []
+        for state, action_list in enumerate(self.policy):
+            tmp = ''
+            if state not in self.end_states:
+                for action, prob in enumerate(action_list):
+                    if prob:
+                        tmp += action_str_list[action]
+            policy_str_list.append(tmp)
+
+        policy_map = np.array(policy_str_list).reshape(map_shape)
+        max_len = max(len(str(s)) for s in policy_map.flat)
+        padding_width = max_len + 1
+
+        with np.printoptions(linewidth=np.inf, formatter={'str_kind': lambda x: f'{x:<{padding_width}}'}):
+            print(policy_map)
