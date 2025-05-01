@@ -17,5 +17,6 @@
 
 $$Q^{\pi}(s, a) = \sum_{s' \in S} P(s'|s, a) \left[ r(s, a, s') + \gamma \sum_{a' \in A} \pi(a'|s') Q^{\pi}(s', a') \right]$$
 
+## 价值迭代
 
-
+在价值迭代中，同样地，参考策略迭代，如果我们环境的奖励机制是随机的话，对应的我们贝尔曼最优方程应该修改成$$V^*(s) = \max_{a \in A} \{\sum_{s' \in S} P(s'|s, a) [ r(s, a, s') + \gamma V^{\pi}(s') ] \} $$
