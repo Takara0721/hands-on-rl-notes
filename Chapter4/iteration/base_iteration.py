@@ -69,3 +69,11 @@ class BaseIteration(abc.ABC):
 
         with np.printoptions(linewidth=np.inf, formatter={'str_kind': lambda x: f'{x:<{padding_width}}'}):
             print(policy_map)
+
+    def predict_action(self, state: int) -> int | None:
+        rand = np.random.random()
+        tmp = 0
+        for action, prob in enumerate(self.policy[state]):
+            tmp += prob
+            if rand < prob:
+                return action
