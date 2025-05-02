@@ -50,7 +50,10 @@ class BaseIteration(abc.ABC):
                 continue
 
     def output_v_policy(self) -> None:
-        map_shape = self.env.shape
+        if hasattr(self.env, 'shape'):
+            map_shape = self.env.shape
+        else:
+            map_shape = (self.env.nrow, self.env.ncol)
         with np.printoptions(precision=3, linewidth=150, formatter={'float': '{: 8.3f}'.format}):
             print(self.value_function_list.reshape(map_shape))
 
@@ -75,5 +78,5 @@ class BaseIteration(abc.ABC):
         tmp = 0
         for action, prob in enumerate(self.policy[state]):
             tmp += prob
-            if rand < prob:
+            if rand < tmp:
                 return action
