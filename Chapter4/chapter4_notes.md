@@ -20,3 +20,7 @@ $$Q^{\pi}(s, a) = \sum_{s' \in S} P(s'|s, a) \left[ r(s, a, s') + \gamma \sum_{a
 ## 价值迭代
 
 在价值迭代中，同样地，参考策略迭代，如果我们环境的奖励机制是随机的话，对应的我们贝尔曼最优方程应该修改成$$V^*(s) = \max_{a \in A} \{\sum_{s' \in S} P(s'|s, a) [ r(s, a, s') + \gamma V^{\pi}(s') ] \} $$
+
+价值迭代收敛性证明中用到了压缩映射定理，笔者这里给出压缩映射定理的简短介绍
+
+[压缩映射定理介绍](https://blog.csdn.net/weixin_48956550/article/details/137146801)

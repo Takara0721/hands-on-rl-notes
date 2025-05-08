@@ -154,15 +154,13 @@ class MarkovDecisionProcess(Markov):
     ) -> ndarray[tuple[int, int], dtype[float64]]:
         state_value_function_list = np.zeros(self.state_num)
         count_list = np.zeros(self.state_num)
-
         for _ in range(sample_num):
             episode = self.sample(timestep_max)
-            start = episode[0].state
-            count_list[start.index] += 1
-            state_value_function_list[start.index] += (
-                    self.compute_return(episode)
-                    - state_value_function_list[start.index]
-            ) / count_list[start.index]
+            G = 0
+            for sa_pair in reversed(episode):
+                G = self.state_action_details[sa_pair].reward + self.gamma * G
+                count_list[sa_pair.state.index] += 1
+                state_value_function_list[sa_pair.state.index] += (G - state_value_function_list[sa_pair.state.index]) / count_list[sa_pair.state.index]
 
         return state_value_function_list.reshape(-1, 1)
 
