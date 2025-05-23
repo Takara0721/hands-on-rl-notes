@@ -27,7 +27,7 @@ def my_cliff_walking(theta: float = 0.001, gamma: float = 0.9) -> None:
     value_iter = ValueIteration(env, theta, gamma)
     value_iter.iteration()
 
-    policy_iter.output_v_policy()
+    value_iter.output_v_policy()
 
 def gym_cliff_walking(theta: float = 0.001, gamma: float = 0.9) -> None:
     env = gym.make("CliffWalking-v0", render_mode="human").unwrapped
@@ -39,7 +39,7 @@ def gym_cliff_walking(theta: float = 0.001, gamma: float = 0.9) -> None:
     value_iter = ValueIteration(env, theta, gamma)
     value_iter.iteration()
 
-    policy_iter.output_v_policy()
+    value_iter.output_v_policy()
 
     gym_visualize(env, policy_iter)
 
@@ -53,7 +53,7 @@ def gym_frozen_lake(theta: float = 0.00001, gamma: float = 0.9) -> None:
     value_iter = ValueIteration(env, theta, gamma)
     value_iter.iteration()
 
-    policy_iter.output_v_policy()
+    value_iter.output_v_policy()
 
     gym_visualize(env, policy_iter)
 
